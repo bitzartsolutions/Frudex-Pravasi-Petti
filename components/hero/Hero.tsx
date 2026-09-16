@@ -4,9 +4,7 @@ import Image from "next/image";
 import { Icon } from "@/components/ui/Icon";
 import { usePetti } from "@/hooks/usePetti";
 
-// TODO: replace with a Cloudinary asset under frudex/branding once available.
-const HERO_IMAGE =
-  "https://lh3.googleusercontent.com/aida-public/AB6AXuAmVqDR8tEtzbY_WhS6IkmRcWvjPccX7-9x15JQ7uvyEpF89Q0CmmyulBm0L6PQIfUqpXkrqrbn5IrZqguchemhcY0lcDpO4vwkU_V50B_M5ywsErPNst36IFeGF0NP4t6_A9WPVI84OM82M9g1rtcKg2-4Bv0iTryapimc_LYiQcGf56DjnlHlBLBRu6bGwJYT0Yi0Os_kso6_WGz7eTEbF-bvTf0Cgv207lYAKfdq2xfYaxVT0gURkA";
+const HERO_IMAGE = "/brand/Pravasi_petti.png";
 
 export function Hero() {
   const { totalItems, openDrawer } = usePetti();
@@ -76,7 +74,7 @@ export function Hero() {
               <div className="relative aspect-[4/5] sm:aspect-[16/10] lg:aspect-[640/440] rounded-xl overflow-hidden shadow-inner">
                 <Image
                   src={HERO_IMAGE}
-                  alt="Pravasi Petti Open Hamper"
+                  alt="Frudex team carefully packing a Pravasi Petti order"
                   fill
                   sizes="(min-width: 1024px) 40vw, 100vw"
                   className="object-cover transform hover:scale-[1.01] transition-transform duration-300"
@@ -86,14 +84,14 @@ export function Hero() {
               <div className="absolute bottom-4 left-4 right-4 bg-primary-container/90 backdrop-blur-md px-space-md py-space-sm rounded-xl text-surface-lowest flex flex-col items-start gap-space-xs sm:flex-row sm:items-center sm:justify-between shadow-lg">
                 <div>
                   <p className="font-label-sm text-label-sm text-secondary-fixed uppercase font-bold tracking-wider">
-                    Bespoke Crate No. 842
+                    Packed With Care
                   </p>
                   <p className="font-headline-sm text-headline-sm text-surface-lowest font-semibold">
-                    The Royale Grand Box
+                    Your Pravasi Petti
                   </p>
                 </div>
                 <span className="px-space-sm py-1 rounded-full bg-secondary text-on-secondary font-label-sm text-label-sm uppercase font-bold tracking-wider whitespace-nowrap">
-                  Signature Edition
+                  Freshly Sealed
                 </span>
               </div>
             </div>
