@@ -7,6 +7,10 @@ import { generateWhatsAppMessage, buildWhatsAppUrl } from "@/lib/whatsapp/genera
 import { apiSuccess, apiError } from "@/lib/utils/apiResponse";
 import type { Order, OrderItem } from "@/types/order";
 
+// Reads/writes Supabase on every request — never attempt static
+// generation/caching for this route.
+export const dynamic = "force-dynamic";
+
 // GET /api/orders?status=<status> -> list orders, admin only
 export async function GET(request: NextRequest) {
   const user = await getAdminUser();

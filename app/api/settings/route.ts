@@ -4,6 +4,9 @@ import { getAdminUser } from "@/lib/supabase/requireAdmin";
 import { settingsSchema } from "@/lib/validations/settings";
 import { apiSuccess, apiError } from "@/lib/utils/apiResponse";
 
+// Writes to Supabase — never attempt static generation/caching for this route.
+export const dynamic = "force-dynamic";
+
 // PATCH /api/settings -> update store settings (currently just the
 // WhatsApp number), admin only.
 export async function PATCH(request: NextRequest) {

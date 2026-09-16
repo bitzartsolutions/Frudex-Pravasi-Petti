@@ -5,6 +5,11 @@ import { getActiveCategories } from "@/lib/data/storefront";
 import { categorySchema } from "@/lib/validations/category";
 import { apiSuccess, apiError } from "@/lib/utils/apiResponse";
 
+// Reads from Supabase on every request — never attempt static
+// generation/caching for this route (that's what caused the build to try
+// prerendering it and fail when env vars weren't available at build time).
+export const dynamic = "force-dynamic";
+
 // GET /api/categories            -> active categories, public
 // GET /api/categories?includeInactive=true -> all categories, admin only
 export async function GET(request: NextRequest) {

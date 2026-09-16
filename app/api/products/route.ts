@@ -5,6 +5,10 @@ import { getActiveProductsWithVariants } from "@/lib/data/storefront";
 import { productSchema } from "@/lib/validations/product";
 import { apiSuccess, apiError } from "@/lib/utils/apiResponse";
 
+// Reads from Supabase on every request — never attempt static
+// generation/caching for this route.
+export const dynamic = "force-dynamic";
+
 // GET /api/products                  -> active products, public
 // GET /api/products?category=<slug>  -> active products in a category, public
 export async function GET(request: NextRequest) {

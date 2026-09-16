@@ -12,19 +12,14 @@ import { getActiveCategories, getActiveProductsWithVariants } from "@/lib/data/s
 export const revalidate = 60;
 
 export default async function HomePage() {
-  let categories: Awaited<ReturnType<typeof getActiveCategories>> = [];
-  let products: Awaited<ReturnType<typeof getActiveProductsWithVariants>> = [];
-
-  try {
-    [categories, products] = await Promise.all([
-      getActiveCategories(),
-      getActiveProductsWithVariants(),
-    ]);
-  } catch (err) {
-    // Storefront degrades to an empty grid rather than a hard crash if
-    // Supabase is unreachable or not yet configured.
-    console.error("Failed to load storefront data:", err);
-  }
+  // getActiveCategories/getActiveProductsWithVariants never throw — they
+  // catch internally and return [] on any failure, so a Supabase outage
+  // or missing env var degrades to an empty grid instead of crashing the
+  // page (or the build, during static generation).
+  const [categories, products] = await Promise.all([
+    getActiveCategories(),
+    getActiveProductsWithVariants(),
+  ]);
 
   return (
     <>

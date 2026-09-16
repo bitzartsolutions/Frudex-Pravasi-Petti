@@ -4,6 +4,10 @@ import { uploadImageBuffer } from "@/lib/cloudinary/upload";
 import { apiSuccess, apiError } from "@/lib/utils/apiResponse";
 import type { CloudinaryFolderKey } from "@/lib/cloudinary/config";
 
+// POST-only route, but declared explicitly for consistency with the other
+// Supabase/Cloudinary-backed routes in this folder.
+export const dynamic = "force-dynamic";
+
 const ACCEPTED_TYPES = new Set(["image/jpeg", "image/jpg", "image/png", "image/webp"]);
 const MAX_SIZE_BYTES = 8 * 1024 * 1024; // 8MB
 const VALID_FOLDERS: CloudinaryFolderKey[] = ["products", "categories", "branding"];
