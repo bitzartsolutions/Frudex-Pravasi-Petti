@@ -45,7 +45,12 @@ export async function POST(request: NextRequest) {
       width: result.width,
       height: result.height,
     });
-  } catch {
+  } catch (err) {
+    // Logged rather than swallowed: this is the only place a misconfigured
+    // Cloudinary credential (or any other upload failure) would otherwise
+    // surface — as a bare 500 with no way to tell what actually went wrong
+    // from Vercel's logs.
+    console.error("Cloudinary upload failed:", err);
     return apiError("Image upload failed. Please try again.", 500);
   }
 }
