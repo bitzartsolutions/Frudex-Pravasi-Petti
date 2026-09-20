@@ -53,6 +53,12 @@ export async function middleware(request: NextRequest) {
   return response;
 }
 
+// /api/:path* is included so admin-authenticated API routes (order status
+// updates, product/category/settings writes) get the same session-refresh
+// pass as page navigations — without it, a request handler that only reads
+// cookies (see lib/supabase/server.ts) could see a session that middleware
+// never had a chance to refresh, and admin actions would fail with a 401
+// that nothing here was watching for.
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: ["/admin/:path*", "/api/:path*"],
 };

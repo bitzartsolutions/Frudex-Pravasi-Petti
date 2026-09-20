@@ -94,9 +94,16 @@ export async function getCategoryById(id: string): Promise<Category | null> {
 
 export async function getAllOrders(): Promise<Order[]> {
   const supabase = await createClient();
+  const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+
   const { data, error } = await supabase
     .from("orders")
     .select("*")
+    // Completed orders drop off this working list a day after they were
+    // marked complete (based on `updated_at`, set by the orders_set_updated_at
+    // trigger) — this only hides them here, the row and its history stay in
+    // the database and the order detail page still loads by direct link.
+    .or(`status.neq.COMPLETED,updated_at.gte.${oneDayAgo}`)
     .order("created_at", { ascending: false });
 
   if (error) throw error;
