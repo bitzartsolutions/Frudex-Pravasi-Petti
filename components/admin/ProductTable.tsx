@@ -19,11 +19,7 @@ export function ProductTable({ products }: { products: ProductWithVariants[] }) 
       const res = await fetch(`/api/products?id=${id}`, { method: "DELETE" });
       const json = await res.json();
       if (!json.success) {
-        alert(
-          json.error?.includes("foreign key")
-            ? "This product has existing orders and can't be deleted — deactivate it instead."
-            : json.error ?? "Failed to delete product"
-        );
+        alert(json.error ?? "Failed to delete product");
         return;
       }
       router.refresh();

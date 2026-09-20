@@ -148,7 +148,11 @@ export async function PATCH(request: NextRequest) {
   return apiSuccess({ ...product, variants: upsertedVariants ?? [], images: upsertedImages });
 }
 
-// DELETE /api/products?id=<uuid> -> delete a product (variants + images cascade), admin only
+// DELETE /api/products?id=<uuid> -> delete a product (variants + images cascade), admin only.
+// Blocked while the product is part of an order that hasn't been completed
+// or cancelled yet — order_items snapshots everything needed to render
+// finished order history, so once every order touching this product is
+// COMPLETED/CANCELLED there's nothing left that still needs the live row.
 export async function DELETE(request: NextRequest) {
   const user = await getAdminUser();
   if (!user) return apiError("Unauthorized", 401);
@@ -157,6 +161,21 @@ export async function DELETE(request: NextRequest) {
   if (!id) return apiError("Missing product id", 400);
 
   const supabase = await createClient();
+
+  const { data: activeOrderItems, error: checkError } = await supabase
+    .from("order_items")
+    .select("order_id, orders!inner(status)")
+    .eq("product_id", id)
+    .in("orders.status", ["PENDING", "CONFIRMED", "PROCESSING"]);
+
+  if (checkError) return apiError(checkError.message, 500);
+  if (activeOrderItems && activeOrderItems.length > 0) {
+    return apiError(
+      "This product is in an order that isn't completed or cancelled yet. Finish or cancel that order first, then delete it.",
+      409
+    );
+  }
+
   const { error } = await supabase.from("products").delete().eq("id", id);
 
   if (error) return apiError(error.message, 500);
